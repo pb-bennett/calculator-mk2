@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator Mk.1</title>
+    <script defer src="./script/script.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Noto Sans"
+    />
+    <link rel="stylesheet" href="./style/style.css" />
+  </head>
+  <body>
+    <h1>Calculator</h1>
+    <div id="main-container" class="border">
+      <div id="calc-container" class="border">
+        <div id="screen-container" class="border">
+          <div id="main-display-container">
+            <span id="main-display">651600</span>
+          </div>
+          <span id="upper-display">325800 x 2 =</span>
+        </div>
+        <div id="button-container" class="border">
+          <div
+            data-btn="clear"
+            data-type="action"
+            class="btn border btn-clear btn-reset"
+          >
+            <span>AC</span>
+          </div>
+          <div
+            data-btn="backspace"
+            data-type="action"
+            class="btn border btn-backspace btn-reset"
+          >
+            <span>⌫</span>
+          </div>
+          <div
+            data-btn="+/-"
+            data-type="action"
+            class="btn border btn-sign-change"
+          >
+            <span>+/-</span>
+          </div>
+          <div data-btn="/" data-type="operator" class="btn border btn-op">
+            <span>/</span>
+          </div>
+          <div data-btn="7" data-type="number" class="btn border btn-num">
+            <span>7</span>
+          </div>
+          <div data-btn="8" data-type="number" class="btn border btn-num">
+            <span>8</span>
+          </div>
+          <div data-btn="9" data-type="number" class="btn border btn-num">
+            <span>9</span>
+          </div>
+          <div data-btn="x" data-type="operator" class="btn border btn-op">
+            <span>x</span>
+          </div>
+          <div data-btn="4" data-type="number" class="btn border btn-num">
+            <span>4</span>
+          </div>
+          <div data-btn="5" data-type="number" class="btn border btn-num">
+            <span>5</span>
+          </div>
+          <div data-btn="6" data-type="number" class="btn border btn-num">
+            <span>6</span>
+          </div>
+          <div data-btn="-" data-type="operator" class="btn border btn-op">
+            <span>-</span>
+          </div>
+          <div data-btn="1" data-type="number" class="btn border btn-num">
+            <span>1</span>
+          </div>
+          <div data-btn="2" data-type="number" class="btn border btn-num">
+            <span>2</span>
+          </div>
+          <div data-btn="3" data-type="number" class="btn border btn-num">
+            <span>3</span>
+          </div>
+          <div data-btn="+" data-type="operator" class="btn border btn-op">
+            <span>+</span>
+          </div>
+          <div
+            data-btn="0"
+            data-type="number"
+            class="btn border btn-num btn-dbl"
+          >
+            <span>0</span>
+          </div>
+          <div data-btn="point" data-type="action" class="btn border btn-point">
+            <span>.</span>
+          </div>
+          <div
+            data-btn="evaluate"
+            data-type="action"
+            class="btn border btn-evaluate"
+          >
+            <span>=</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
