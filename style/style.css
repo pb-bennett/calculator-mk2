@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "Noto Sans", sans-serif;
 }
 
 h1 {
@@ -101,4 +101,17 @@ h1 {
 
 .btn-mouseover {
   border: rgb(146, 146, 146) 3px solid;
+}
+
+#debug-output {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.debug-output {
+  border: 1px black solid;
 }
