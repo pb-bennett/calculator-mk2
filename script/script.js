@@ -25,8 +25,8 @@ const init = function () {
   firstNumber = evalNumber = currentOperator = upperString = "";
   lowerString = firstNumber;
   operatorToggle = evaluatedToggle = false;
-  secondNumber =
-    "1111111111111111111111111111111111111111111111111111111111111111111111111";
+  // secondNumber =
+  //   "1111111111111111111111111111111111111111111111111111111111111111111111111";
   updateNumber();
 
   // setScreen();
@@ -34,18 +34,28 @@ const init = function () {
 };
 
 const updateDisplay = function () {
+  lowerString = lowerString.toString();
   if (lowerString.length > 80) return naughtyCatcher("stupidBigNumber");
   mainDisplay.style.fontSize = `${setLowerDisplayFontSize()}px`;
+  upperDisplay.style.fontSize = `${setUpperDisplayFontSize()}px`;
 
   mainDisplay.textContent = lowerString;
   upperDisplay.textContent = upperString;
 };
 
 const setLowerDisplayFontSize = function () {
-  console.log(lowerString.length);
-  if (lowerString.length < 16) return 50;
-  if (lowerString.length < 27) return 30;
+  // console.log("lower", lowerString.length);
+  const lsl = lowerString.toString().length;
+  // console.log(lsl);
+  if (lsl < 14) return 50;
+  if (lsl >= 14 && lsl < 27) return 30;
   return 20;
+};
+const setUpperDisplayFontSize = function () {
+  // console.log("upper", upperString.length);
+  if (upperString.length < 20) return 35;
+  if (upperString.length < 27) return 20;
+  return 15;
 };
 
 const updateNumber = function () {
@@ -87,6 +97,7 @@ const actionClick = function (input) {
 
 const operatorClick = function (input) {
   // if (secondNumber === "0" || !secondNumber) return console.log("guarded");
+  evaluatedToggle = false;
   if (operatorToggle) {
     console.log("operator toggle");
     currentOperator = input;
@@ -105,7 +116,6 @@ const operatorClick = function (input) {
     return;
   }
   if (firstNumber && evaluatedToggle) {
-    evaluatedToggle = false;
     currentOperator = input;
     upperString = `${firstNumber} ${currentOperator}`;
     lowerString = "";
@@ -116,10 +126,12 @@ const operatorClick = function (input) {
   if (firstNumber && !evaluatedToggle) {
     if (currentOperator === "/" && secondNumber === "0")
       return naughtyCatcher("divideByZero");
+    testFunction("operatorClick", "orangered", "-start-fnc3");
     firstNumber = evalNumber = evaluateOperation(input);
     currentOperator = input;
     upperString = `${firstNumber} ${currentOperator}`;
     secondNumber = lowerString = "";
+    evaluatedToggle = true;
     testFunction("operatorClick", "orangered", "-End-fnc3");
     return;
   }
@@ -154,10 +166,15 @@ const evaluateOperation = function (operator) {
   return evaluateHelp(operator);
 };
 const evaluateHelp = function (operator) {
-  if (operator === "+") return Number(firstNumber) + Number(secondNumber);
-  if (operator === "-") return Number(firstNumber) - Number(secondNumber);
-  if (operator === "x") return Number(firstNumber) * Number(secondNumber);
-  if (operator === "/") return Number(firstNumber) / Number(secondNumber);
+  console.log(`evaluating ${firstNumber} ${currentOperator} ${secondNumber}`);
+  if (currentOperator === "+")
+    return Number(firstNumber) + Number(secondNumber);
+  if (currentOperator === "-")
+    return Number(firstNumber) - Number(secondNumber);
+  if (currentOperator === "x")
+    return Number(firstNumber) * Number(secondNumber);
+  if (currentOperator === "/")
+    return Number(firstNumber) / Number(secondNumber);
 };
 const naughtyCatcher = function (input) {
   if (input === "divideByZero") {
@@ -177,7 +194,7 @@ const naughtyCatcher = function (input) {
   setTimeout(function () {
     btnAll.forEach((el) => el.addEventListener("click", addMouseClickListener));
     init();
-  }, 3000);
+  }, 4000);
 };
 
 const backspace = function () {
