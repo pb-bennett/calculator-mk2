@@ -17,13 +17,14 @@ let firstNumber,
   upperString,
   evaluatedToggle,
   lowerString,
-  rollToggle;
+  operatorToggle;
+let previousCalculations = [];
 
 const init = function () {
   secondNumber = "0";
   firstNumber = evalNumber = currentOperator = upperString = "";
   lowerString = firstNumber;
-  rollToggle = evaluatedToggle = false;
+  operatorToggle = evaluatedToggle = false;
   updateNumber();
 
   // setScreen();
@@ -48,10 +49,14 @@ const btnClick = function (input, type) {
 };
 
 const numberClick = function (input) {
-  if (rollToggle) {
+  operatorToggle = false;
+  if (evaluatedToggle && !currentOperator) {
+    console.log("this");
+    evaluatedToggle = false;
+    firstNumber = upperString = lowerString = "";
+    updateDisplay();
   }
-  if (evaluatedToggle) {
-  }
+
   if (secondNumber === "0") secondNumber = "";
   secondNumber = secondNumber + input;
   lowerString = secondNumber;
@@ -69,9 +74,17 @@ const actionClick = function (input) {
 };
 
 const operatorClick = function (input) {
-  if (secondNumber === "0" || !secondNumber) return console.log("guarded");
+  // if (secondNumber === "0" || !secondNumber) return console.log("guarded");
+  if (operatorToggle) {
+    console.log("operator toggle");
+    currentOperator = input;
+    console.log(`currentOperator:${currentOperator}`);
+    upperString = `${firstNumber} ${currentOperator}`;
+    return;
+  }
+  operatorToggle = true;
   testFunction("operatorClick", "orangered", "Start");
-  if (!firstNumber) {
+  if (!firstNumber && !evaluatedToggle) {
     firstNumber = secondNumber;
     lowerString = secondNumber = "";
     currentOperator = input;
@@ -79,35 +92,57 @@ const operatorClick = function (input) {
     testFunction("operatorClick", "orangered", "-End-fnc1");
     return;
   }
-  if (firstNumber) {
-    evaluate("calledByOperator");
-    nextOperator = input;
+  if (firstNumber && evaluatedToggle) {
+    evaluatedToggle = false;
+    currentOperator = input;
+    upperString = `${firstNumber} ${currentOperator}`;
+    lowerString = "";
+
     testFunction("operatorClick", "orangered", "-End-fnc2");
+    return;
+  }
+  if (firstNumber && !evaluatedToggle) {
+    firstNumber = evalNumber = evaluateOperation(input);
+    currentOperator = input;
+    upperString = `${firstNumber} ${currentOperator}`;
+    secondNumber = lowerString = "";
+    testFunction("operatorClick", "orangered", "-End-fnc3");
+    return;
   }
 };
+operatorToggle = false;
 const evaluate = function (callSource) {
   testFunction("evaluate", "blue", "Start");
-  if (callSource === "calledByBtn") {
-    lowerString = evalNumber = evaluateOperation(currentOperator);
-    upperString = `${firstNumber} ${currentOperator} ${secondNumber} =`;
-    // currentOperator = "";
-    updateDisplay();
-  }
-  if (callSource === "calledByOperator") {
-    testFunction("evaluate", "green", "-CBO-");
 
-  }
+  lowerString = evalNumber = evaluateOperation(currentOperator);
+  upperString = `${firstNumber} ${currentOperator} ${secondNumber} =`;
+  firstNumber = evalNumber;
+  currentOperator = "";
+  secondNumber = "";
+
+  updateDisplay();
   evaluatedToggle = true;
 
   testFunction("evaluate", "blue", "-End-");
 };
 const evaluateOperation = function (operator) {
+  console.log(`evaluating ${firstNumber} ${currentOperator} ${secondNumber}`);
+  const evaluation = evaluateHelp(operator);
+  previousCalculations.push({
+    firstNumber: Number(firstNumber),
+    currentOperator,
+    secondNumber: Number(secondNumber),
+    evaluation,
+  });
+  console.log(previousCalculations);
+  return evaluateHelp(operator);
+};
+const evaluateHelp = function (operator) {
   if (operator === "+") return Number(firstNumber) + Number(secondNumber);
   if (operator === "-") return Number(firstNumber) - Number(secondNumber);
   if (operator === "x") return Number(firstNumber) * Number(secondNumber);
   if (operator === "/") return Number(firstNumber) / Number(secondNumber);
 };
-
 const backspace = function () {
   secondNumber = secondNumber.slice(0, -1);
   if (secondNumber === "") secondNumber = "0";
@@ -141,6 +176,10 @@ const testFunction = function (
   element.textContent = text;
   element.style.color = color;
   debugContainer.append(element);
+  console.log(
+    `evaluatedToggle:${evaluatedToggle} operatorToggle:${operatorToggle}`
+  );
+
   // const text = `${counter}:<<${position}>><<${inputFunction}>>, CurOp: ${currentOperator}
   // fNA: ${firstNumber},  oA: ${operatorsArr[counter]},  sNA: ${secondNumber},  eA: ${evaluationsArr[counter]},  cS: ${currentString},  uS: ${upperString}`;
   // const element = document.createElement("div");
