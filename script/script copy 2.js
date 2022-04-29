@@ -49,6 +49,14 @@ const btnClick = function (input, type) {
 
 const numberClick = function (input) {
   if (rollToggle) {
+    console.log("rolling");
+    evaluatedToggle === false;
+    rollToggle === false;
+    firstNumber = evalNumber;
+    upperString = `${firstNumber} ${currentOperator}`;
+    secondNumber = "";
+    // currentOperator = "";
+    lowerString = "0";
   }
   if (evaluatedToggle) {
   }
@@ -90,12 +98,16 @@ const evaluate = function (callSource) {
   if (callSource === "calledByBtn") {
     lowerString = evalNumber = evaluateOperation(currentOperator);
     upperString = `${firstNumber} ${currentOperator} ${secondNumber} =`;
-    // currentOperator = "";
+    currentOperator = "";
     updateDisplay();
   }
   if (callSource === "calledByOperator") {
     testFunction("evaluate", "green", "-CBO-");
-
+    lowerString = evalNumber = evaluateOperation(currentOperator);
+    upperString = `${firstNumber} ${currentOperator} ${secondNumber} =`;
+    currentOperator = nextOperator;
+    nextOperator = "";
+    rollToggle = true;
   }
   evaluatedToggle = true;
 
