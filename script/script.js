@@ -25,6 +25,8 @@ const init = function () {
   firstNumber = evalNumber = currentOperator = upperString = "";
   lowerString = firstNumber;
   operatorToggle = evaluatedToggle = false;
+  secondNumber =
+    "1111111111111111111111111111111111111111111111111111111111111111111111111";
   updateNumber();
 
   // setScreen();
@@ -32,8 +34,18 @@ const init = function () {
 };
 
 const updateDisplay = function () {
+  if (lowerString.length > 80) return naughtyCatcher("stupidBigNumber");
+  mainDisplay.style.fontSize = `${setLowerDisplayFontSize()}px`;
+
   mainDisplay.textContent = lowerString;
   upperDisplay.textContent = upperString;
+};
+
+const setLowerDisplayFontSize = function () {
+  console.log(lowerString.length);
+  if (lowerString.length < 16) return 50;
+  if (lowerString.length < 27) return 30;
+  return 20;
 };
 
 const updateNumber = function () {
@@ -102,6 +114,8 @@ const operatorClick = function (input) {
     return;
   }
   if (firstNumber && !evaluatedToggle) {
+    if (currentOperator === "/" && secondNumber === "0")
+      return naughtyCatcher("divideByZero");
     firstNumber = evalNumber = evaluateOperation(input);
     currentOperator = input;
     upperString = `${firstNumber} ${currentOperator}`;
@@ -113,6 +127,8 @@ const operatorClick = function (input) {
 operatorToggle = false;
 const evaluate = function (callSource) {
   testFunction("evaluate", "blue", "Start");
+  if (currentOperator === "/" && secondNumber === "0")
+    return naughtyCatcher("divideByZero");
 
   lowerString = evalNumber = evaluateOperation(currentOperator);
   upperString = `${firstNumber} ${currentOperator} ${secondNumber} =`;
@@ -143,6 +159,27 @@ const evaluateHelp = function (operator) {
   if (operator === "x") return Number(firstNumber) * Number(secondNumber);
   if (operator === "/") return Number(firstNumber) / Number(secondNumber);
 };
+const naughtyCatcher = function (input) {
+  if (input === "divideByZero") {
+    upperString =
+      "Division by zero detected. Please don't try that again, the world may well end!";
+    lowerString = "resetting...";
+  }
+  if (input === "stupidBigNumber") {
+    upperString =
+      "That number is ridiculously long!  Please try to behave yourself and use me properly next time.";
+    lowerString = "resetting...";
+  }
+  updateDisplay();
+  btnAll.forEach((el) =>
+    el.removeEventListener("mousedown", addMouseClickListener)
+  );
+  setTimeout(function () {
+    btnAll.forEach((el) => el.addEventListener("click", addMouseClickListener));
+    init();
+  }, 3000);
+};
+
 const backspace = function () {
   secondNumber = secondNumber.slice(0, -1);
   if (secondNumber === "") secondNumber = "0";
@@ -179,26 +216,16 @@ const testFunction = function (
   console.log(
     `evaluatedToggle:${evaluatedToggle} operatorToggle:${operatorToggle}`
   );
-
-  // const text = `${counter}:<<${position}>><<${inputFunction}>>, CurOp: ${currentOperator}
-  // fNA: ${firstNumber},  oA: ${operatorsArr[counter]},  sNA: ${secondNumber},  eA: ${evaluationsArr[counter]},  cS: ${currentString},  uS: ${upperString}`;
-  // const element = document.createElement("div");
-  // element.classList.add("debug-content");
-  // element.textContent = text;
-  // element.style.color = color;
-  // debugContainer.append(element);
-  // console.log(inputFunction, counter);
-  // console.log(firstNumbersArr, secondNubersArr, operatorsArr, evaluationsArr);
 };
 
+const addMouseClickListener = function (e) {
+  e.target.closest(".btn").style.color = "white";
+  setTimeout(() => (e.target.closest(".btn").style.color = "black"), 300);
+  const clicked = e.target.closest(".btn");
+  btnClick(clicked.dataset.btn, clicked.dataset.type);
+};
 btnAll.forEach((el) => {
-  el.addEventListener("mousedown", function (e) {
-    // console.log(e.target.dataset.btn);
-    e.target.closest(".btn").style.color = "white";
-    setTimeout(() => (e.target.closest(".btn").style.color = "black"), 300);
-    const clicked = e.target.closest(".btn");
-    btnClick(clicked.dataset.btn, clicked.dataset.type);
-  });
+  el.addEventListener("mousedown", addMouseClickListener);
   el.addEventListener("mouseover", function (e) {
     btnAll.forEach((el) => el.classList.remove("btn-mouseover"));
     e.target.closest(".btn").classList.add("btn-mouseover");
